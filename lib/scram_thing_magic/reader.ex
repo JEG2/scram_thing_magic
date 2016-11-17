@@ -42,9 +42,12 @@ defmodule ScramThingMagic.Reader do
       if chip && now - reader.last_play > 7 do
         Logger.info("Detected #{chip}.")
         sound = Path.expand("../../priv/#{chip}.mp3", __DIR__)
-        pre_play_time = now
-        System.cmd(reader.player, [sound])
-        %__MODULE__{reader | last_play: pre_play_time}
+        Task.start(fn ->
+          Logger.debug("Playing sound...")
+          System.cmd(reader.player, [sound])
+          Logger.debug("Sound finished.")
+        end)
+        %__MODULE__{reader | last_play: now}
       else
         Logger.debug("Ignoring #{epc}.")
         reader
