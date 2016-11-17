@@ -2,7 +2,7 @@ defmodule ScramThingMagic.Reader do
   use GenServer
   require Logger
 
-  defstruct ~w[player port last_play]a
+  defstruct ~w[feed player port last_play]a
 
   @table %{
     "35E0170102000000008A7012" => "kaylee",
@@ -28,7 +28,7 @@ defmodule ScramThingMagic.Reader do
 
   def handle_cast(:connect, reader) do
     Logger.debug("Connecting…")
-    port = Port.open({:spawn, "sleep 3"}, [:exit_status])
+    port = Port.open({:spawn, reader.feed}, [:exit_status])
     true = Port.connect(port, self)
     {:noreply, %__MODULE__{reader | port: port}}
   end
