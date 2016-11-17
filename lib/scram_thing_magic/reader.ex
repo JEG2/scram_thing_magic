@@ -20,6 +20,7 @@ defmodule ScramThingMagic.Reader do
   def init(config) do
     connect(self)
     reader = %__MODULE__{
+      feed: Keyword.fetch!(config, :feed),
       player: Keyword.fetch!(config, :player),
       last_play: now
     }
