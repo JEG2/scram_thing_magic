@@ -29,7 +29,7 @@ defmodule ScramThingMagic.Reader do
 
   def handle_cast(:connect, reader) do
     Logger.debug("Connecting…")
-    port = Port.open({:spawn, reader.feed}, [:exit_status])
+    port = Port.open({:spawn, reader.feed}, [:binary, :exit_status])
     true = Port.connect(port, self)
     {:noreply, %__MODULE__{reader | port: port}}
   end
