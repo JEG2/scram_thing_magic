@@ -5,7 +5,7 @@ defmodule ScramThingMagic.Reader do
   defstruct ~w[feed player port last_play]a
 
   @table %{
-    "35E0170102000000008A7012" => "kaylee",
+    "300833B2DDD9014000000000" => "kaylee",
     "35E0170102000000008A6B05" => "apollo"
   }
 
