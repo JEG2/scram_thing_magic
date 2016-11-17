@@ -44,7 +44,11 @@ defmodule ScramThingMagic.Reader do
         sound = Path.expand("../../priv/#{chip}.mp3", __DIR__)
         Task.start(fn ->
           Logger.debug("Playing sound...")
-          System.cmd(reader.player, [sound])
+          try do
+            System.cmd(reader.player, [sound])
+          rescue
+            error -> Logger.debug("Play error:  #{inspect error}.")
+          end
           Logger.debug("Sound finished.")
         end)
         %__MODULE__{reader | last_play: now}
@@ -65,6 +69,6 @@ defmodule ScramThingMagic.Reader do
   end
 
   defp now do
-    :erlang.monotonic_time(1)
+    System.monotonic_time(:seconds)
   end
 end
