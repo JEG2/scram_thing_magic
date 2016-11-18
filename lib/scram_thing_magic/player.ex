@@ -18,7 +18,7 @@ defmodule ScramThingMagic.Player do
 
   def handle_cast({:play, sound}, player) do
     Logger.debug("Player started…")
-    port = Port.open({:spawn, "#{player} #{sound}"}, [:exit_status])
+    port = Port.open({:spawn, "#{player.player} #{sound}"}, [:exit_status])
     timer = Process.send_after(self, {:close, port}, 6_000)
     {:noreply, %__MODULE__{player | timer: timer}}
   end
