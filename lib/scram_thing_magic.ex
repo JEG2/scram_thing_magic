@@ -12,7 +12,8 @@ defmodule ScramThingMagic do
     # Define workers and child supervisors to be supervised
     children = [
       # Starts a worker by calling: ScramThingMagic.Worker.start_link(arg1, arg2, arg3)
-      worker(ScramThingMagic.Reader, [[feed: feed, player: player]]),
+      worker(ScramThingMagic.Player, [[player: player]]),
+      worker(ScramThingMagic.Reader, [[feed: feed]]),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

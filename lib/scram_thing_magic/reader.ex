@@ -1,8 +1,9 @@
 defmodule ScramThingMagic.Reader do
   use GenServer
   require Logger
+  alias ScramThingMagic.Player
 
-  defstruct ~w[feed player port last_play]a
+  defstruct ~w[feed port last_play]a
 
   @table %{
     "300833B2DDD9014000000000" => "kaylee",
@@ -21,7 +22,6 @@ defmodule ScramThingMagic.Reader do
     connect(self)
     reader = %__MODULE__{
       feed: Keyword.fetch!(config, :feed),
-      player: Keyword.fetch!(config, :player),
       last_play: now
     }
     {:ok, reader}
@@ -30,7 +30,6 @@ defmodule ScramThingMagic.Reader do
   def handle_cast(:connect, reader) do
     Logger.debug("Connecting…")
     port = Port.open({:spawn, reader.feed}, [:binary, :exit_status])
-    true = Port.connect(port, self)
     {:noreply, %__MODULE__{reader | port: port}}
   end
 
@@ -42,15 +41,7 @@ defmodule ScramThingMagic.Reader do
       if chip && now - reader.last_play > 7 do
         Logger.info("Detected #{chip}.")
         sound = Path.expand("../../priv/#{chip}.mp3", __DIR__)
-        Task.start(fn ->
-          Logger.debug("Playing sound...")
-          try do
-            System.cmd(reader.player, [sound])
-          rescue
-            error -> Logger.debug("Play error:  #{inspect error}.")
-          end
-          Logger.debug("Sound finished.")
-        end)
+        Player.play(sound)
         %__MODULE__{reader | last_play: now}
       else
         Logger.debug("Ignoring #{epc}.")
