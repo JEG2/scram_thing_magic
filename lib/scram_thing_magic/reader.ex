@@ -7,7 +7,7 @@ defmodule ScramThingMagic.Reader do
 
   @table %{
     "300833B2DDD9014000000000" => "kaylee",
-    "35E0170102000000008A6B05" => "apollo"
+    "35E0170102000000008A6B05" => "kaylee"
   }
 
   def start_link(config) do
@@ -38,7 +38,7 @@ defmodule ScramThingMagic.Reader do
     [_match, epc] = Regex.run(~r{\AEPC:(\S+)\b}, data)
     chip = @table[epc]
     new_reader =
-      if chip && now - reader.last_play > 7 do
+    if chip && now - reader.last_play > 5 do
         Logger.info("Detected #{chip}.")
         sound = Path.expand("../../priv/#{chip}.mp3", __DIR__)
         Player.play(sound)
