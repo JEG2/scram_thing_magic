@@ -1,0 +1,34 @@
+#! /bin/sh
+# /etc/init.d/scram 
+
+### BEGIN INIT INFO
+# Provides:          scram
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Simple script to start a program at boot
+# Description:       A simple script from www.stuffaboutcode.com which will start / stop a program a boot / shutdown.
+### END INIT INFO
+
+# If you want a command to always run, put it here
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+    echo "Starting scram"
+    # run application you want to start
+    sudo -u pi /bin/bash -li -c 'cd /home/pi/src/scram_thing_magic && SCRAM_FEED="/home/pi/src/mercuryapi-1.27.3.16/c/src/api/read tmr:///dev/ttyUSB0" SCRAM_PLAYER=omxplayer mix run --no-halt'
+    ;;
+  stop)
+    echo "Stopping scram"
+    # kill application you want to stop
+    pkill -u pi -f mix
+    ;;
+  *)
+    echo "Usage: /etc/init.d/scram {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
